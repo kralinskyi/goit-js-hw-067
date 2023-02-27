@@ -33,9 +33,16 @@ function onGalleryClick(event) {
 
   instance.show();
 
-  document.addEventListener("keydown", onEscPress);
   const imgEl = instance.element().querySelector("img");
   imgEl.addEventListener("click", onCloseClick);
+
+  function onCloseClick(event) {
+    event.preventDefault();
+    instance.close();
+    imgEl.removeEventListener("click", onCloseClick);
+  }
+
+  document.addEventListener("keydown", onEscPress);
 
   function onEscPress(event) {
     if (event.code === "Escape") {
@@ -43,12 +50,5 @@ function onGalleryClick(event) {
       document.removeEventListener("keydown", onEscPress);
       imgEl.removeEventListener("click", onCloseClick);
     }
-  }
-
-  function onCloseClick(event) {
-    event.preventDefault();
-    instance.close();
-    document.removeEventListener("keydown", onEscPress);
-    imgEl.removeEventListener("click", onCloseClick);
   }
 }
