@@ -29,17 +29,16 @@ function onGalleryClick(event) {
 
   if (event.target.nodeName !== "IMG") return;
 
-  const instance = basicLightbox
-    .create(
-      `
+  const instance = basicLightbox.create(
+    `
     <img src="${event.target.dataset.source}" width="800" height="600">
 `,
-      {
-        onShow: () => window.addEventListener("keydown", onEscClose),
-        onClose: () => window.removeEventListener("keydown", onEscClose),
-      }
-    )
-    .show();
+    {
+      onShow: () => window.addEventListener("keydown", onEscClose),
+      onClose: () => window.removeEventListener("keydown", onEscClose),
+    }
+  );
+  instance.show();
 
   function onEscClose(e) {
     if (e.code === "Escape") {
