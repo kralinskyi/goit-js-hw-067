@@ -20,8 +20,7 @@ function createGalleryMarkup(items) {
 function onGalleryClick(event) {
   event.preventDefault();
 
-  const linkEl = event.target.closest(".gallery__link");
-  if (!linkEl) return;
+  if (event.target.nodename !== "IMG") return;
 }
 
 new SimpleLightbox(".gallery a", {
