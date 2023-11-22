@@ -1,47 +1,44 @@
 import { galleryItems } from "./gallery-items.js";
-// Change code below this line
+
 const gallery = document.querySelector(".gallery");
-const galleryMarkup = createGalleryMarkup(galleryItems);
+const galleryMarkup = imagesMarkup(galleryItems);
 
-gallery.insertAdjacentHTML("beforeend", galleryMarkup);
-gallery.addEventListener("click", onGalleryClick);
+gallery.insertAdjacentHTML("afterbegin", galleryMarkup);
+gallery.addEventListener("click", onImageClick);
 
-function createGalleryMarkup(items) {
-  return items
+function imagesMarkup(images) {
+  return images
     .map(({ preview, original, description }) => {
-      return `<div class="gallery__item">
-  <a class="gallery__link" href="${original}">
-    <img
-      class="gallery__image"
-      src="${preview}"
-      data-source="${original}"
-      alt="${description}"
-    />
-  </a>
-</div>
-      `;
+      return `<li class="gallery__item">
+         <a class="gallery__link" href=${original}>
+           <img
+             class="gallery__image"
+             src=${preview}
+             data-source=${original}
+             alt=${description}
+           />
+         </a>
+       </li>`;
     })
     .join("");
 }
 
-function onGalleryClick(event) {
-  event.preventDefault();
+function onImageClick(e) {
+  e.preventDefault();
+  if (e.target.nodeName !== "IMG") return;
+  handleBasicLightBox(e.target.dataset.source);
+}
 
-  if (event.target.nodeName !== "IMG") return;
+function handleBasicLightBox(originalImgSize) {
+  const instance = basicLightbox.create(`<img src=${originalImgSize}>`, {
+    onShow: () => window.addEventListener("keydown", onEscClose),
+    onClose: () => window.removeEventListener("keydown", onEscClose),
+  });
 
-  const instance = basicLightbox.create(
-    `
-    <img src="${event.target.dataset.source}" width="800" height="600">
-`,
-    {
-      onShow: () => window.addEventListener("keydown", onEscClose),
-      onClose: () => window.removeEventListener("keydown", onEscClose),
-    }
-  );
   instance.show();
 
-  function onEscClose(e) {
-    if (e.code === "Escape") {
+  function onEscClose({ code }) {
+    if (code === "Escape") {
       instance.close();
     }
   }
